@@ -1,0 +1,12 @@
+# Device backups contain copies of third-party APKs (copyrighted - never publish them)
+# plus details about your device and installed apps.
+backups/
+*.apk
+*.plbackup
+
+# Your personal package list (see debloat.txt)
+debloat.local.txt
+
+# Local editor/tool settings
+.claude/
+.DS_Store

@@ -1,0 +1,43 @@
+# Package list for ./shield-debloat.sh - one package per line, '#' starts a comment.
+# Uncomment a line to include it. Always do a dry run first: ./shield-debloat.sh
+#
+# Tip: copy this file to debloat.local.txt and edit that instead. The script prefers
+# it, and it's git-ignored, so your personal app list never ends up in a commit.
+#
+# Only things that run in the background, or that you'll never use, are worth touching.
+# Disabling an idle system app saves nothing and just adds risk.
+# System apps are disabled (not deleted). Undo everything with ./shield-restore.sh --apply.
+# Developed against a 2019 SHIELD TV Pro on Android 11 - package names may differ on other models.
+
+# --- Telemetry / feedback: background services with no user-facing function ---
+com.nvidia.stats                     # NVIDIA usage telemetry
+com.nvidia.feedback                  # NVIDIA feedback reporter
+com.google.android.feedback          # Google feedback reporter
+com.nvidia.diagtools                 # NVIDIA diagnostics
+
+# --- Only if you use a custom launcher (see ./shield-launcher.sh) ---
+# com.google.android.tvrecommendations # "Android TV Core Services": feeds the stock home screen's
+#                                      # recommendation rows. If your launcher's channels stop
+#                                      # updating after disabling it, re-enable it.
+
+# --- Only if you don't use the feature ---
+# com.google.android.backdrop          # Ambient Mode screensaver (keep if it's your screensaver)
+# com.nvidia.tegrazone3                # NVIDIA Games app
+# com.nvidia.nvgamecast                # NVIDIA game broadcasting/streaming
+# com.google.android.play.games        # Google Play Games
+# com.google.android.katniss           # Voice search / Google Assistant - remote mic button stops working
+# com.google.android.speech.pumpkin    # Offline voice commands (pair with katniss)
+# com.google.android.apps.mediashell   # Chromecast built-in - phones can no longer cast to the Shield
+# com.google.android.tv.remote.service # Remote control from the Google TV phone app
+# com.nvidia.shield.remote.server      # Remote control from the NVIDIA SHIELD TV phone app
+
+# --- Preinstalled streaming apps you may not use ---
+# User-installed apps are UNINSTALLED (only if their APK is in your backup, so they can be
+# reinstalled by ./shield-restore.sh). App data and logins are lost.
+# com.netflix.ninja                    # Netflix
+# com.amazon.amazonvideo.livingroom    # Prime Video
+# com.google.android.youtube.tv        # YouTube
+# com.google.android.youtube.tvmusic   # YouTube Music
+
+# --- Not recommended ---
+# com.nvidia.ota                       # System updates - you'd stop getting security and bug fixes
