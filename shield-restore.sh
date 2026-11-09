@@ -88,6 +88,7 @@ while read -r ns key val; do
 done < "$backup/settings.txt"
 
 extra=$(comm -13 "$backup/installed.txt" <(pkgs))
+# shellcheck disable=SC2086 # unquoted on purpose: one package name per line
 [ -z "$extra" ] || { echo "Installed since this backup (left alone):"; printf '  %s\n' $extra; }
 
 if [ "$changes" = 0 ]; then echo "Nothing to do - device already matches the backup."

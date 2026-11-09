@@ -64,6 +64,18 @@ or AT4K (if you prefer the Apple TV look and feel)
 ./shield-launcher.sh stock       # undo: re-enable and use the stock launcher
 ```
 
+### Make shortcuts
+
+`make` lists them. They cover the read-only and everyday steps: `connect`, `devices`,
+`backup`, `backup-state`, `debloat-dry-run`, `restore-dry-run`, `launcher` and `reboot`.
+Anything that changes the device (`--apply`) has no make target on purpose. Run the
+script yourself so you can see exactly what you're running.
+
+```sh
+make connect SHIELD=192.168.1.20   # adb connect 192.168.1.20:5555
+make backup SHIELD=192.168.1.20    # SHIELD=<ip>[:port] picks the device for any target
+```
+
 ## What each script does
 
 | Script                                 | Changes                                                                                                                                                                                                                                                   |
@@ -82,6 +94,18 @@ or AT4K (if you prefer the Apple TV look and feel)
   `1` is stock. Default `0.5`.
 - **Protected packages:** `common.sh` has a `PROTECTED` list (system UI, settings, Play
   Store, Play Services, keyboard, launchers, ...) that is never touched, even if listed.
+
+## Development
+
+```sh
+brew install shellcheck   # or your package manager's shellcheck
+make lint                 # shellcheck every script
+```
+
+CI (`.github/workflows/lint.yml`) runs `make lint` on every push to `main` and on every
+pull request, using a pinned, checksum-verified shellcheck release. `.shellcheckrc` lets
+shellcheck follow `common.sh` into each script. Any warning that's intentionally ignored
+has an inline `# shellcheck disable=…` comment explaining why.
 
 ## Safety notes
 
