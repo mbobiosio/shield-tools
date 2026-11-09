@@ -66,15 +66,21 @@ or AT4K (if you prefer the Apple TV look and feel)
 
 ### Make shortcuts
 
-`make` lists them. They cover the read-only and everyday steps: `connect`, `devices`,
-`backup`, `backup-state`, `debloat-dry-run`, `restore-dry-run`, `launcher` and `reboot`.
-Anything that changes the device (`--apply`) has no make target on purpose. Run the
-script yourself so you can see exactly what you're running.
+If you'd rather not remember flags, `make` lists shortcuts for every step. Anything that
+changes the device shows the dry run first and asks `Apply these changes? [y/N]`. Only
+`y` applies it; anything else, or no terminal at all, applies nothing.
 
 ```sh
 make connect SHIELD=192.168.1.20   # adb connect 192.168.1.20:5555
-make backup SHIELD=192.168.1.20    # SHIELD=<ip>[:port] picks the device for any target
+make backup                        # 1. snapshot package state + APKs
+make debloat                       # 2-3. preview, then asks before applying
+make reboot                        # 4.
+make restore                       # undo: preview, then asks (BACKUP=backups/... for an older one)
+make launcher-set                  # switch to Projectivy (PKG=<package>, DISABLE_STOCK=1), asks first
+make launcher-stock                # back to the stock launcher, asks first
 ```
+
+`SHIELD=<ip>[:port]` picks the device for any target when several are connected.
 
 ## What each script does
 
@@ -105,7 +111,8 @@ make lint                 # shellcheck every script
 CI (`.github/workflows/lint.yml`) runs `make lint` on every push to `main` and on every
 pull request, using a pinned, checksum-verified shellcheck release. `.shellcheckrc` lets
 shellcheck follow `common.sh` into each script. Any warning that's intentionally ignored
-has an inline `# shellcheck disable=…` comment explaining why.
+has an inline `# shellcheck disable=…` comment explaining why. `make/` holds the small
+helpers behind the Makefile's preview-and-ask prompts.
 
 ## Safety notes
 
