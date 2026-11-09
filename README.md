@@ -53,6 +53,16 @@ Undo everything:
 ./shield-restore.sh backups/20260101-120000 --apply   # or a specific backup
 ```
 
+Just one app:
+
+```sh
+./shield-debloat.sh --only com.nvidia.feedback [--apply]   # disable/uninstall one package
+./shield-restore.sh --only com.nvidia.feedback [--apply]   # bring that one back
+```
+
+`--only` uses the same safety checks (protected list, backup required) and leaves the
+animation speed, launcher and settings alone.
+
 Change the launcher (defaults to [Projectivy Launcher](https://play.google.com/store/apps/details?id=com.spocky.projengmenu)):
 
 or AT4K (if you prefer the Apple TV look and feel)
@@ -76,6 +86,8 @@ make backup                        # 1. snapshot package state + APKs
 make debloat                       # 2-3. preview, then asks before applying
 make reboot                        # 4.
 make restore                       # undo: preview, then asks (BACKUP=backups/... for an older one)
+make remove                        # one app: search by name, pick it, preview, ask (or PKG=<package>)
+make reinstall                     # bring one app back from the backup, same way
 make launcher-set                  # switch to Projectivy (PKG=<package>, DISABLE_STOCK=1), asks first
 make launcher-stock                # back to the stock launcher, asks first
 ```
@@ -84,12 +96,12 @@ make launcher-stock                # back to the stock launcher, asks first
 
 ## What each script does
 
-| Script                                 | Changes                                                                                                                                                                                                                                                   |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `shield-backup.sh [--no-apks]`         | Nothing on the device. Saves installed/enabled/disabled package lists, the default launcher, animation and screensaver settings, and pulls the APKs (including split APKs) of user-installed apps to `backups/<timestamp>/`.                              |
-| `shield-debloat.sh [--apply]`          | For each package in the list: **system apps are disabled** (`pm disable-user`, nothing deleted). **User-installed apps are uninstalled**, but only if their APK is in the latest backup. Sets animation scales to `0.5`. Refuses to run without a backup. |
-| `shield-restore.sh [backup] [--apply]` | Reinstalls missing apps (from the device itself or the backed-up APKs), re-enables/re-disables packages to match the backup, restores the launcher and settings. Apps installed after the backup are only reported, never removed.                        |
-| `shield-launcher.sh`                   | Sets the default HOME activity; optionally disables the stock launcher.                                                                                                                                                                                   |
+| Script                                                | Changes                                                                                                                                                                                                                                                   |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shield-backup.sh [--no-apks]`                        | Nothing on the device. Saves installed/enabled/disabled package lists, the default launcher, animation and screensaver settings, and pulls the APKs (including split APKs) of user-installed apps to `backups/<timestamp>/`.                              |
+| `shield-debloat.sh [--only <pkg>] [--apply]`          | For each package in the list: **system apps are disabled** (`pm disable-user`, nothing deleted). **User-installed apps are uninstalled**, but only if their APK is in the latest backup. Sets animation scales to `0.5`. Refuses to run without a backup. |
+| `shield-restore.sh [backup] [--only <pkg>] [--apply]` | Reinstalls missing apps (from the device itself or the backed-up APKs), re-enables/re-disables packages to match the backup, restores the launcher and settings. Apps installed after the backup are only reported, never removed.                        |
+| `shield-launcher.sh`                                  | Sets the default HOME activity; optionally disables the stock launcher.                                                                                                                                                                                   |
 
 ## Customising
 

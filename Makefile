@@ -6,8 +6,8 @@
 # `make` on its own lists what there is.
 
 .DEFAULT_GOAL := help
-.PHONY: help connect devices backup backup-state debloat restore launcher launcher-set \
-	launcher-stock reboot lint
+.PHONY: help connect devices backup backup-state debloat restore remove reinstall launcher \
+	launcher-set launcher-stock reboot lint
 
 SHELLCHECK ?= shellcheck
 SHIELD ?=
@@ -48,6 +48,14 @@ debloat: ## Preview the debloat, then ask before applying it
 
 restore: ## Preview a restore from the latest backup (or BACKUP=<dir>), then ask
 	@make/preview-then-apply.sh ./shield-restore.sh $(BACKUP)
+
+remove: ## Disable/uninstall one app, after a preview (PKG=<package>, or search)
+	@pkg="$(PKG)"; [ -n "$$pkg" ] || pkg=$$(make/pick-package.sh remove) || exit 1; \
+	make/preview-then-apply.sh ./shield-debloat.sh --only "$$pkg"
+
+reinstall: ## Bring one app back from the backup, after a preview (PKG=<package>, or search)
+	@pkg="$(PKG)"; [ -n "$$pkg" ] || pkg=$$(make/pick-package.sh reinstall $(BACKUP)) || exit 1; \
+	make/preview-then-apply.sh ./shield-restore.sh $(BACKUP) --only "$$pkg"
 
 launcher: ## Show the default launcher and the ones available
 	@./shield-launcher.sh status
